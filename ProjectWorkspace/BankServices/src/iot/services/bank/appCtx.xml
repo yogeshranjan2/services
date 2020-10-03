@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+		
+	<context:component-scan base-package="iot.services,iot.util" />
+	
+	<context:property-placeholder location="iot/services/bank/application.properties, iot/services/bank/data.properties" />
+
+	<bean id="bankService" class="iot.services.bank.BankService" scope="singleton" init-method="init" destroy-method="cleanUp" lazy-init="true">
+		<!-- <constructor-arg index="0">
+			<ref bean="bankDAO" />
+		</constructor-arg> -->
+		<property name="protocol">
+			<value>${message.protocol}</value>
+		</property>
+	</bean>
+	<!-- <bean id="paymentService" class="iot.services.bank.PaymentService" scope="singleton" init-method="init" destroy-method="cleanUp" /> -->
+	<bean id="bankDAO" class="iot.dao.bank.BankDAO" scope="singleton" />
+	
+	<bean id="homeAddress" class="iot.services.bank.Address">
+		<property name="city" value="Bangalore" />
+		<property name="state" value="KA" />
+	</bean>
+
+	<bean id="officeAddress" class="iot.services.bank.Address">
+		<property name="city" value="Hyderabad" />
+		<property name="state" value="TS" />
+	</bean>
+	
+	<bean id="luxuryAddress" class="iot.services.bank.Address">
+		<property name="city" value="Mysore" />
+		<property name="state" value="KA" />
+	</bean>
+	
+	
+	<bean class="iot.services.bank.TimeCaptureBeanPostProcessor" />
+	<bean class="iot.services.bank.BeanCountBeanFactoryPostProcessor" />
+</beans>
+		
